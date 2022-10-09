@@ -35,3 +35,4 @@ public:
 	afx_msg LRESULT 自定义消息处理函数(WPARAM wparam,LPARAM lparam);
 	afx_msg void OnBnClickedButton1();
 };
+  
