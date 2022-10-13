@@ -1,11 +1,11 @@
 ﻿
-// MFC06Dlg.cpp: 实现文件
+// MFC07Dlg.cpp: 实现文件
 //
 
 #include "pch.h"
 #include "framework.h"
-#include "MFC06.h"
-#include "MFC06Dlg.h"
+#include "MFC07.h"
+#include "MFC07Dlg.h"
 #include "afxdialogex.h"
 
 #ifdef _DEBUG
@@ -46,40 +46,38 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CMFC06Dlg 对话框
+// CMFC07Dlg 对话框
 
 
 
-CMFC06Dlg::CMFC06Dlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_MFC06_DIALOG, pParent)
-	, staticStr(_T("注意事项"))
-	, staticStr2(_T(""))
+CMFC07Dlg::CMFC07Dlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_MFC07_DIALOG, pParent)
+	, m_editStr(_T(""))
+	, m_testCheckBool(FALSE)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-void CMFC06Dlg::DoDataExchange(CDataExchange* pDX)
+void CMFC07Dlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_BUTTON2, nameTwo);
-	DDX_Control(pDX, IDC_BUTTON1, nameOne);
-	DDX_Text(pDX, IDC_STATIC1, staticStr);
-	DDX_Control(pDX, IDC_STATIC1, staticKJ);
-	DDX_Text(pDX, IDC_STATIC2, staticStr2);
+	DDX_Control(pDX, IDC_EDIT1, m_testEdit);
+	DDX_Text(pDX, IDC_EDIT2, m_editStr);
+	DDX_Control(pDX, IDC_CHECK1, m_testCheck);
+	//  DDX_Check(pDX, IDC_CHECK2, m_testCheckBool);
 }
 
-BEGIN_MESSAGE_MAP(CMFC06Dlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CMFC07Dlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDC_BUTTON1, &CMFC06Dlg::OnBnClickedButton1)
-	ON_BN_CLICKED(IDC_BUTTON2, &CMFC06Dlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON1, &CMFC07Dlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
-// CMFC06Dlg 消息处理程序
+// CMFC07Dlg 消息处理程序
 
-BOOL CMFC06Dlg::OnInitDialog()
+BOOL CMFC07Dlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
@@ -113,7 +111,7 @@ BOOL CMFC06Dlg::OnInitDialog()
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
-void CMFC06Dlg::OnSysCommand(UINT nID, LPARAM lParam)
+void CMFC07Dlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
@@ -130,7 +128,7 @@ void CMFC06Dlg::OnSysCommand(UINT nID, LPARAM lParam)
 //  来绘制该图标。  对于使用文档/视图模型的 MFC 应用程序，
 //  这将由框架自动完成。
 
-void CMFC06Dlg::OnPaint()
+void CMFC07Dlg::OnPaint()
 {
 	if (IsIconic())
 	{
@@ -157,26 +155,26 @@ void CMFC06Dlg::OnPaint()
 
 //当用户拖动最小化窗口时系统调用此函数取得光标
 //显示。
-HCURSOR CMFC06Dlg::OnQueryDragIcon()
+HCURSOR CMFC07Dlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
 
 
-void CMFC06Dlg::OnBnClickedButton1()
+void CMFC07Dlg::OnBnClickedButton1()
 {
-	// TODO: 在此添加控件通知处理程序代码
-}
-
-
-void CMFC06Dlg::OnBnClickedButton2()
-{
-// 	auto p=GetDlgItem(IDC_BUTTON1);
-// 	p->SetWindowTextA("我被修改了！");
-	nameOne.SetWindowTextA("我被修改了！");
-	staticKJ.SetWindowTextA("我被xxxx了");//cstatic修改
-	//UpdateData(TRUE);
-	//staticStr = "静态文本被修改";//cstring修改
-	//UpdateData(FALSE);//FALSE把变量值更新至控件上
+	UpdateData(TRUE);
+	CString cs;
+	m_testEdit.GetWindowTextA(cs);
+	m_editStr = "str测试";
+	UpdateData(FALSE);
+	if (!cs.Compare("123")) {
+		MessageBox("输入正确","提示",MB_OK);
+	}
+	else {
+		MessageBox("输入错误", "提示", MB_OK);
+	}
+	int i=m_testCheck.GetCheck();
+	bool b=m_testCheckBool;
 }
