@@ -3,7 +3,7 @@
 //
 
 #pragma once
-
+#include "非模态.h"
 
 // CMFC05Dlg 对话框
 class CMFC05Dlg : public CDialogEx
@@ -33,4 +33,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedButton1();
+	afx_msg void OnBnClickedButton2();
+	非模态 *noMt;
+	static CMFC05Dlg *cmfc05Dlg;
 };

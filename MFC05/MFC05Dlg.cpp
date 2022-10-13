@@ -8,6 +8,7 @@
 #include "MFC05Dlg.h"
 #include "afxdialogex.h"
 #include "模态.h"
+#include "非模态.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -51,7 +52,7 @@ END_MESSAGE_MAP()
 
 
 CMFC05Dlg::CMFC05Dlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_MFC05_DIALOG, pParent)
+	: CDialogEx(IDD_MFC05_DIALOG, pParent), noMt(NULL)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -66,6 +67,7 @@ BEGIN_MESSAGE_MAP(CMFC05Dlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CMFC05Dlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CMFC05Dlg::OnBnClickedButton2)
 END_MESSAGE_MAP()
 
 
@@ -165,3 +167,19 @@ void CMFC05Dlg::OnBnClickedButton1()
 	模态 mt;
 	mt.DoModal();
 }
+
+
+void CMFC05Dlg::OnBnClickedButton2()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if (noMt==NULL)
+	{
+		noMt = new 非模态();
+		noMt->Create(IDD_DIALOG2, this);
+	}
+	
+
+	noMt->ShowWindow(SW_SHOW);
+}
+
+CMFC05Dlg * CMFC05Dlg::cmfc05Dlg=NULL;

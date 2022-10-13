@@ -36,6 +36,9 @@
     <ClInclude Include="模态.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="非模态.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MFC05.cpp">
@@ -48,6 +51,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="模态.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="非模态.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

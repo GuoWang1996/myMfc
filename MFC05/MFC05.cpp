@@ -73,6 +73,7 @@ BOOL CMFC05App::InitInstance()
 
 	CMFC05Dlg dlg;
 	m_pMainWnd = &dlg;
+	CMFC05Dlg::cmfc05Dlg = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
 	{
