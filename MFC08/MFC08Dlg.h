@@ -34,4 +34,8 @@ protected:
 public:
 	CComboBox m_comboBox;
 	afx_msg void OnCbnSelchangeCombo1();
+	CListBox m_CListBox;
+	afx_msg void OnLbnDblclkList1();
+	afx_msg void OnBnClickedButton1();
+	CEdit m_CEdit;
 };

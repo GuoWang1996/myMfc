@@ -60,6 +60,8 @@ void CMFC08Dlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_COMBO1, m_comboBox);
+	DDX_Control(pDX, IDC_LIST1, m_CListBox);
+	DDX_Control(pDX, IDC_EDIT1, m_CEdit);
 }
 
 BEGIN_MESSAGE_MAP(CMFC08Dlg, CDialogEx)
@@ -67,6 +69,8 @@ BEGIN_MESSAGE_MAP(CMFC08Dlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_CBN_SELCHANGE(IDC_COMBO1, &CMFC08Dlg::OnCbnSelchangeCombo1)
+	ON_LBN_DBLCLK(IDC_LIST1, &CMFC08Dlg::OnLbnDblclkList1)
+	ON_BN_CLICKED(IDC_BUTTON1, &CMFC08Dlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -106,6 +110,9 @@ BOOL CMFC08Dlg::OnInitDialog()
 	m_comboBox.AddString("第三行");
 	m_comboBox.AddString("第四行");
 	m_comboBox.AddString("第五行");
+	m_CListBox.AddString("第一行");
+	m_CListBox.AddString("第二行");
+	m_CListBox.AddString("第三行");
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -165,4 +172,24 @@ void CMFC08Dlg::OnCbnSelchangeCombo1()
 	int i = m_comboBox.GetCurSel();
 	CString cs;
 	m_comboBox.GetLBText(i,cs);
+}
+
+
+void CMFC08Dlg::OnLbnDblclkList1()
+{
+	int i=m_CListBox.GetCurSel();
+	if (i!=-1)
+	{
+		CString cs;
+		m_CListBox.GetText(i, cs);
+		m_CListBox.DeleteString(i);
+	}
+}
+
+
+void CMFC08Dlg::OnBnClickedButton1()
+{
+	CString cs;
+	m_CEdit.GetWindowTextA(cs);
+	m_CListBox.AddString(cs);
 }
