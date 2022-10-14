@@ -29,6 +29,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC07", "MFC07\MFC07.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC08", "MFC08\MFC08.vcxproj", "{224930CE-7658-41BF-B8E7-C90E8B221C80}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC09", "MFC09\MFC09.vcxproj", "{98661F92-39F6-453A-B316-18E07F225256}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -141,6 +143,14 @@ Global
 		{224930CE-7658-41BF-B8E7-C90E8B221C80}.Release|x64.Build.0 = Release|x64
 		{224930CE-7658-41BF-B8E7-C90E8B221C80}.Release|x86.ActiveCfg = Release|Win32
 		{224930CE-7658-41BF-B8E7-C90E8B221C80}.Release|x86.Build.0 = Release|Win32
+		{98661F92-39F6-453A-B316-18E07F225256}.Debug|x64.ActiveCfg = Debug|x64
+		{98661F92-39F6-453A-B316-18E07F225256}.Debug|x64.Build.0 = Debug|x64
+		{98661F92-39F6-453A-B316-18E07F225256}.Debug|x86.ActiveCfg = Debug|Win32
+		{98661F92-39F6-453A-B316-18E07F225256}.Debug|x86.Build.0 = Debug|Win32
+		{98661F92-39F6-453A-B316-18E07F225256}.Release|x64.ActiveCfg = Release|x64
+		{98661F92-39F6-453A-B316-18E07F225256}.Release|x64.Build.0 = Release|x64
+		{98661F92-39F6-453A-B316-18E07F225256}.Release|x86.ActiveCfg = Release|Win32
+		{98661F92-39F6-453A-B316-18E07F225256}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
