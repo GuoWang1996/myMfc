@@ -32,5 +32,10 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 public:
+	void PrintDirs();
+	void Recurse(LPCTSTR pstr);
 	afx_msg void OnBnClickedButton1();
+	afx_msg void OnBnClickedButton2();
+
+	CString fileName;
 };

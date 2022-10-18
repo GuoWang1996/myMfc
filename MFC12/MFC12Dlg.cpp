@@ -52,6 +52,7 @@ END_MESSAGE_MAP()
 
 CMFC12Dlg::CMFC12Dlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_MFC12_DIALOG, pParent)
+	, fileName(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -59,6 +60,7 @@ CMFC12Dlg::CMFC12Dlg(CWnd* pParent /*=nullptr*/)
 void CMFC12Dlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Text(pDX, IDC_EDIT1, fileName);
 }
 
 BEGIN_MESSAGE_MAP(CMFC12Dlg, CDialogEx)
@@ -66,6 +68,7 @@ BEGIN_MESSAGE_MAP(CMFC12Dlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CMFC12Dlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CMFC12Dlg::OnBnClickedButton2)
 END_MESSAGE_MAP()
 
 
@@ -128,6 +131,7 @@ BOOL CMFC12Dlg::OnInitDialog()
 		//关闭流
 		file.Close();
 	}
+
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -199,4 +203,49 @@ void CMFC12Dlg::OnBnClickedButton1()
 			file.Close();
 		}
 	}
+}
+
+
+
+void CMFC12Dlg::Recurse(LPCTSTR pstr)
+{
+	UpdateData(TRUE);
+	CFileFind finder;
+
+	// build a string with wildcards
+	CString strWildcard(pstr);
+	strWildcard += "\\*.*";
+
+	BOOL bWorking = finder.FindFile(strWildcard);
+
+	while (bWorking)
+	{
+		bWorking = finder.FindNextFile();
+		if (finder.IsDots())
+			continue;
+		if (finder.IsDirectory())
+		{
+			CString str = finder.GetFilePath();
+			TRACE(_T("%s\n"), (LPCTSTR)str);
+			Recurse(str);
+		}
+		CString path = finder.GetFilePath();
+		if (finder.GetFileTitle()==fileName)
+		{
+			MessageBox("找到文件，文件路径:"+ path, "title", MB_OK);
+		}
+		TRACE(_T("%s\n"), (LPCTSTR)path);
+	}
+
+	finder.Close();
+}
+
+void CMFC12Dlg::PrintDirs()
+{
+	Recurse(_T("E:\\VS项目\\MFC01\\MFC12"));
+}
+void CMFC12Dlg::OnBnClickedButton2()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	PrintDirs();
 }
