@@ -65,6 +65,7 @@ BEGIN_MESSAGE_MAP(CMFC12Dlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BUTTON1, &CMFC12Dlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -110,7 +111,9 @@ BOOL CMFC12Dlg::OnInitDialog()
 		//1.设置游标为初始位置
 		file.SeekToBegin();
 		//2.1 写入
-		char name[] = "Hello World";
+		char name[] = "Hello World\n";
+		file.Write(name, sizeof(name));//也可用strlen
+		file.Write(name, sizeof(name));//也可用strlen
 		file.Write(name, sizeof(name));//也可用strlen
 		//file.Write(name, strlen(name));
 		file.Flush();
@@ -118,7 +121,7 @@ BOOL CMFC12Dlg::OnInitDialog()
 		//2.2 读
 		char pbufRead[64] ; //初始化为0 否则没有\0
 		file.Read(pbufRead, 64);
-		CString cs= file.GetFilePath();
+		CString cs= file.GetFilePath(); 
 		CString fileName = file.GetFileName();
 		CFileStatus status;
 		file.GetStatus(status);
@@ -177,3 +180,23 @@ HCURSOR CMFC12Dlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void CMFC12Dlg::OnBnClickedButton1()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CFileDialog fileDialog(TRUE,NULL,NULL,OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT,"MyType Files (*.txt)|*.txt|All Files (*.*)|*.*||",this);
+	if (fileDialog.DoModal()== IDOK)
+	{
+		CString fileName = fileDialog.GetFileName();
+		CString filePath = fileDialog.GetPathName();
+		CFile file;
+		if (file.Open(fileName, CFile::modeCreate | CFile::modeReadWrite))
+		{
+			//1.自定义文件处理
+			//****************
+			//2.关闭流
+			file.Close();
+		}
+	}
+}
