@@ -37,6 +37,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC11", "MFC11\MFC11.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC12", "MFC12\MFC12.vcxproj", "{F3E7B634-3A87-4422-9E63-EC87003B1299}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC13", "MFC13\MFC13.vcxproj", "{817C3569-3EF8-4338-BE3F-81AE6AF1CCE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -181,6 +183,14 @@ Global
 		{F3E7B634-3A87-4422-9E63-EC87003B1299}.Release|x64.Build.0 = Release|x64
 		{F3E7B634-3A87-4422-9E63-EC87003B1299}.Release|x86.ActiveCfg = Release|Win32
 		{F3E7B634-3A87-4422-9E63-EC87003B1299}.Release|x86.Build.0 = Release|Win32
+		{817C3569-3EF8-4338-BE3F-81AE6AF1CCE4}.Debug|x64.ActiveCfg = Debug|x64
+		{817C3569-3EF8-4338-BE3F-81AE6AF1CCE4}.Debug|x64.Build.0 = Debug|x64
+		{817C3569-3EF8-4338-BE3F-81AE6AF1CCE4}.Debug|x86.ActiveCfg = Debug|Win32
+		{817C3569-3EF8-4338-BE3F-81AE6AF1CCE4}.Debug|x86.Build.0 = Debug|Win32
+		{817C3569-3EF8-4338-BE3F-81AE6AF1CCE4}.Release|x64.ActiveCfg = Release|x64
+		{817C3569-3EF8-4338-BE3F-81AE6AF1CCE4}.Release|x64.Build.0 = Release|x64
+		{817C3569-3EF8-4338-BE3F-81AE6AF1CCE4}.Release|x86.ActiveCfg = Release|Win32
+		{817C3569-3EF8-4338-BE3F-81AE6AF1CCE4}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
