@@ -11,7 +11,8 @@
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-
+#define MYTHREAD(a,b,c,d,e,f)\
+((HANDLE)_beginthreadex((void*)a,b,(_beginthreadex_proc_type)c,(void*)d,e,(unsigned int*)f))
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -65,6 +66,8 @@ BEGIN_MESSAGE_MAP(CMFCthread01Dlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BUTTON1, &CMFCthread01Dlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CMFCthread01Dlg::OnBnClickedButton2)
 END_MESSAGE_MAP()
 
 
@@ -145,7 +148,18 @@ void CMFCthread01Dlg::OnPaint()
 		CDialogEx::OnPaint();
 	}
 }
-
+void Call_输出调试信息(char*pszFormat,...) {
+#ifdef _DEBUG
+	char szbufFormat[0x1000];
+	char szbufFormat_Game[0x1000]="";
+	va_list argList;
+	va_start(argList, pszFormat);//参数列表初始化
+	vsprintf_s(szbufFormat, pszFormat, argList);
+	strcat_s(szbufFormat_Game, szbufFormat);
+	OutputDebugString(szbufFormat_Game);
+	va_end(argList);
+#endif
+}
 //当用户拖动最小化窗口时系统调用此函数取得光标
 //显示。
 HCURSOR CMFCthread01Dlg::OnQueryDragIcon()
@@ -153,3 +167,63 @@ HCURSOR CMFCthread01Dlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+DWORD WINAPI MyThreadFunction(LPVOID lpParam) {
+	int value = (int)lpParam;
+	while (1)
+	{
+		//TRACE("线程运行中----%d\n",lpParam2);
+		Call_输出调试信息("线程运行中----%d\n", value);
+		DWORD i = GetCurrentThreadId();
+		Sleep(1000);
+	}
+	int i=GetLastError();
+	return -5;
+	
+}
+unsigned __stdcall MyBeginthreadex(void* lpParam) {
+	int value = (int)lpParam;
+	while (1)
+	{
+		//TRACE("线程运行中----%d\n",lpParam2);
+		Call_输出调试信息("_beginthreadex线程运行中----%d\n", value);
+		DWORD i=GetCurrentThreadId();
+		Sleep(1000);
+	}
+	int i = GetLastError();
+	return -5;
+};
+static HANDLE g_handle;
+void CMFCthread01Dlg::OnBnClickedButton1()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	DWORD adress=0;
+	//1.安全描述符 结构体 一般为NULL 默认值
+	//2.堆栈大小 一般为NULL 默认值
+	//3.线程函数地址 注意，这里是固定格式
+	//4.线程参数
+	//5.创建标志 可以CREATE_SUSPENDED 创建后挂起 or 0 立即执行
+	//6.返回线程ID
+	g_handle = MYTHREAD(NULL, NULL, MyThreadFunction, (LPVOID)2, 0,&adress);
+
+	if (g_handle !=NULL)
+	{
+		MessageBox("创建线程成功@");
+	}
+	//关闭打开的对象句柄
+	//CloseHandle()
+	//WaitForSingleObject(g_handle, INFINITE);
+}
+
+
+void CMFCthread01Dlg::OnBnClickedButton2()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	unsigned int adress = 0;
+	g_handle =(HANDLE) _beginthreadex(NULL, NULL, MyBeginthreadex, (VOID*)2, 0, &adress);
+	if (g_handle)
+	{
+		MessageBox("创建_beginthreadex线程成功@");
+	}
+
+}
