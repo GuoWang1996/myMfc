@@ -68,6 +68,7 @@ BEGIN_MESSAGE_MAP(CMFCthread01Dlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CMFCthread01Dlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMFCthread01Dlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON3, &CMFCthread01Dlg::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 
@@ -170,11 +171,21 @@ HCURSOR CMFCthread01Dlg::OnQueryDragIcon()
 
 DWORD WINAPI MyThreadFunction(LPVOID lpParam) {
 	int value = (int)lpParam;
-	while (1)
+	//while (1)
+	//{
+	//	//TRACE("线程运行中----%d\n",lpParam2);
+	//	Call_输出调试信息("线程运行中----%d\n", value);
+	//	DWORD i = GetCurrentThreadId();
+	//	Sleep(1000);
+	//}
+	DWORD threadId = GetCurrentThreadId();
+	for (size_t i = 0; i < 10; i++)
 	{
-		//TRACE("线程运行中----%d\n",lpParam2);
-		Call_输出调试信息("线程运行中----%d\n", value);
-		DWORD i = GetCurrentThreadId();
+		Call_输出调试信息("线程运行中----%d,ID:%d\n", i, threadId);
+		if (i==5)
+		{
+			ExitThread(threadId);
+		}
 		Sleep(1000);
 	}
 	int i=GetLastError();
@@ -225,5 +236,16 @@ void CMFCthread01Dlg::OnBnClickedButton2()
 	{
 		MessageBox("创建_beginthreadex线程成功@");
 	}
+}
 
+//获取退出码
+void CMFCthread01Dlg::OnBnClickedButton3()
+{
+	if (g_handle)
+	{
+		STILL_ACTIVE
+		DWORD mode;
+		int id=GetExitCodeThread(g_handle, &mode);
+		Call_输出调试信息("线程退出码:----%d\n", mode);
+	}
 }
