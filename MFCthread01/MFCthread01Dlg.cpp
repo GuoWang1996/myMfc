@@ -69,6 +69,8 @@ BEGIN_MESSAGE_MAP(CMFCthread01Dlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON1, &CMFCthread01Dlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMFCthread01Dlg::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BUTTON3, &CMFCthread01Dlg::OnBnClickedButton3)
+	ON_BN_CLICKED(IDC_BUTTON4, &CMFCthread01Dlg::OnBnClickedButton4)
+	ON_BN_CLICKED(IDC_BUTTON5, &CMFCthread01Dlg::OnBnClickedButton5)
 END_MESSAGE_MAP()
 
 
@@ -243,9 +245,23 @@ void CMFCthread01Dlg::OnBnClickedButton3()
 {
 	if (g_handle)
 	{
-		STILL_ACTIVE
+		
 		DWORD mode;
 		int id=GetExitCodeThread(g_handle, &mode);
 		Call_输出调试信息("线程退出码:----%d\n", mode);
 	}
+}
+
+//暂停
+void CMFCthread01Dlg::OnBnClickedButton4()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	::SuspendThread(g_handle);
+}
+
+//恢复
+void CMFCthread01Dlg::OnBnClickedButton5()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	ResumeThread(g_handle);
 }
