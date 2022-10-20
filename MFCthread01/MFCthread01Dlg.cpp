@@ -7,7 +7,7 @@
 #include "MFCthread01.h"
 #include "MFCthread01Dlg.h"
 #include "afxdialogex.h"
-
+#include "tlhelp32.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -60,6 +60,7 @@ CMFCthread01Dlg::CMFCthread01Dlg(CWnd* pParent /*=nullptr*/)
 void CMFCthread01Dlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_LIST1, m_listBox);
 }
 
 BEGIN_MESSAGE_MAP(CMFCthread01Dlg, CDialogEx)
@@ -71,6 +72,7 @@ BEGIN_MESSAGE_MAP(CMFCthread01Dlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON3, &CMFCthread01Dlg::OnBnClickedButton3)
 	ON_BN_CLICKED(IDC_BUTTON4, &CMFCthread01Dlg::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON5, &CMFCthread01Dlg::OnBnClickedButton5)
+	ON_BN_CLICKED(IDC_BUTTON6, &CMFCthread01Dlg::OnBnClickedButton6)
 END_MESSAGE_MAP()
 
 
@@ -106,7 +108,6 @@ BOOL CMFCthread01Dlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -264,4 +265,55 @@ void CMFCthread01Dlg::OnBnClickedButton5()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	ResumeThread(g_handle);
+}
+
+//遍历线程
+void CMFCthread01Dlg::OnBnClickedButton6()
+{
+	vector<DWORD>threadIds;		
+	DWORD pid = GetCurrentProcessId();	//获取进程ID
+	//刷新界面
+	threadIds.clear();	
+	if (m_listBox.GetCount()>0)
+	{
+		for (size_t i = m_listBox.GetCount(); i <= m_listBox.GetCount(); i--)
+		{
+			m_listBox.DeleteString(i);
+		}
+		
+	}
+	//获取所有线程ID
+	getAllThreads(pid, threadIds);
+	//界面显示
+	for (size_t i = 0; i < threadIds.size(); i++)
+	{
+		CString str;
+		str.Format("%d", threadIds[i]);
+		m_listBox.AddString(str);
+	}
+	
+}
+//获取所有线程
+BOOL CMFCthread01Dlg::getAllThreads(DWORD pid, vector<DWORD>&threadIds)
+{
+	HANDLE hProcessSnap;
+	THREADENTRY32 te32;	//大小一定要指定！！！
+	te32.dwSize = sizeof(THREADENTRY32);
+	//1.快照
+	hProcessSnap=CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD,0);
+	int i=GetLastError();
+	BOOL status = Thread32First(hProcessSnap, &te32);
+	if (Thread32First(hProcessSnap, &te32)==FALSE)
+	{
+		CloseHandle(hProcessSnap);     // Must clean up the snapshot object!
+		return(FALSE);
+	}
+	do 
+	{
+		//if (te32.th32OwnerProcessID == pid)
+		//{
+			threadIds.push_back(te32.th32ThreadID);
+	/*	}*/
+	} while (Thread32Next(hProcessSnap, &te32));
+	return TRUE;
 }

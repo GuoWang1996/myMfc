@@ -3,8 +3,8 @@
 //
 
 #pragma once
-
-
+#include<vector>
+using namespace std;
 // CMFCthread01Dlg 对话框
 class CMFCthread01Dlg : public CDialogEx
 {
@@ -37,4 +37,7 @@ public:
 	afx_msg void OnBnClickedButton3();
 	afx_msg void OnBnClickedButton4();
 	afx_msg void OnBnClickedButton5();
+	afx_msg void OnBnClickedButton6();
+	BOOL getAllThreads(DWORD pid,vector<DWORD>&threadIds);
+	CListBox m_listBox;
 };
