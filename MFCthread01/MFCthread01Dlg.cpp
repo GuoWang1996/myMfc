@@ -204,10 +204,11 @@ unsigned __stdcall MyBeginthreadex(void* lpParam) {
 	ZeroMemory(&si, sizeof(si));
 	si.cb = sizeof(si);
 	ZeroMemory(&pi, sizeof(pi));
-	BOOL status = CreateProcess(".\\MFCthread01.exe", NULL, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
+	BOOL status = CreateProcess("E:\\VS项目\\MFC01\\Debug\\MFthread02.exe", "-1 -2", NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
 	if (!status)
 	{
 		MessageBox(NULL,"创建进程失败！！！","提示",MB_OK);
+		return -2;
 	}
 	int value = (int)lpParam;
 	DWORD dwWaitResult;
