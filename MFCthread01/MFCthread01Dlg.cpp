@@ -199,15 +199,37 @@ DWORD WINAPI MyThreadFunction(LPVOID lpParam) {
 	
 }
 unsigned __stdcall MyBeginthreadex(void* lpParam) {
+	STARTUPINFO si;
+	PROCESS_INFORMATION pi;
+	ZeroMemory(&si, sizeof(si));
+	si.cb = sizeof(si);
+	ZeroMemory(&pi, sizeof(pi));
+	BOOL status = CreateProcess(".\\MFCthread01.exe", NULL, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
+	if (!status)
+	{
+		MessageBox(NULL,"创建进程失败！！！","提示",MB_OK);
+	}
 	int value = (int)lpParam;
+	DWORD dwWaitResult;
 	while (1)
 	{
-		//TRACE("线程运行中----%d\n",lpParam2);
-		Call_输出调试信息("_beginthreadex线程运行中----%d\n", value);
+		Call_输出调试信息("监控线程运行中----%d\n", GetCurrentThreadId());
+		dwWaitResult = WaitForSingleObject(
+			pi.hProcess,    
+			INFINITE);  // no time-out interval
+
+		switch (dwWaitResult)
+		{
+		case WAIT_OBJECT_0:
+			CloseHandle(pi.hThread);
+			CloseHandle(pi.hProcess);
+			return TRUE;
+		case WAIT_ABANDONED:
+			return FALSE;
+		}	
 		DWORD i=GetCurrentThreadId();
 		Sleep(1000);
 	}
-	int i = GetLastError();
 	return -5;
 };
 static HANDLE g_handle;
@@ -325,22 +347,15 @@ BOOL CMFCthread01Dlg::getAllThreads(DWORD pid, vector<DWORD>&threadIds)
 //创建进程
 void CMFCthread01Dlg::OnBnClickedButton7()
 {
-	STARTUPINFO si;
-	PROCESS_INFORMATION pi;
-	ZeroMemory(&si, sizeof(si));
-	si.cb = sizeof(si);
-	ZeroMemory(&pi, sizeof(pi));
-	BOOL status= CreateProcess(".\\MFCthread01.exe",NULL, NULL,NULL,FALSE,0, NULL, NULL, &si, &pi);
-	if (!status)
-	{
-		MessageBox("创建进程失败！！！");
-	}
-	// Wait until child process exits.
-	//WaitForSingleObject(pi.hProcess, INFINITE);
 
-	// Close process and thread handles. 
-	CloseHandle(pi.hProcess);
-	CloseHandle(pi.hThread);
+	unsigned int adress = 0;
+	//创建监控线程
+	g_handle = (HANDLE)_beginthreadex(NULL, NULL, MyBeginthreadex, NULL, 0, &adress);
+	if (g_handle)
+	{
+		int i=GetCurrentThreadId();
+		MessageBox("线程开启成功");
+	}
 }
 
 
@@ -353,7 +368,6 @@ void CMFCthread01Dlg::OnBnClickedButton8()
 //管理员打开进程
 void CMFCthread01Dlg::OnBnClickedButton9()
 {
-
 	SHELLEXECUTEINFOA sy;
 	ZeroMemory(&sy,sizeof(SHELLEXECUTEINFOA));
 	sy.cbSize = sizeof(SHELLEXECUTEINFOA);
