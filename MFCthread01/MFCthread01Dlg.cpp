@@ -73,6 +73,9 @@ BEGIN_MESSAGE_MAP(CMFCthread01Dlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON4, &CMFCthread01Dlg::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON5, &CMFCthread01Dlg::OnBnClickedButton5)
 	ON_BN_CLICKED(IDC_BUTTON6, &CMFCthread01Dlg::OnBnClickedButton6)
+	ON_BN_CLICKED(IDC_BUTTON7, &CMFCthread01Dlg::OnBnClickedButton7)
+	ON_BN_CLICKED(IDC_BUTTON8, &CMFCthread01Dlg::OnBnClickedButton8)
+	ON_BN_CLICKED(IDC_BUTTON9, &CMFCthread01Dlg::OnBnClickedButton9)
 END_MESSAGE_MAP()
 
 
@@ -298,6 +301,7 @@ BOOL CMFCthread01Dlg::getAllThreads(DWORD pid, vector<DWORD>&threadIds)
 {
 	HANDLE hProcessSnap;
 	THREADENTRY32 te32;	//大小一定要指定！！！
+	ZeroMemory(&te32,sizeof(THREADENTRY32));
 	te32.dwSize = sizeof(THREADENTRY32);
 	//1.快照
 	hProcessSnap=CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD,0);
@@ -310,10 +314,56 @@ BOOL CMFCthread01Dlg::getAllThreads(DWORD pid, vector<DWORD>&threadIds)
 	}
 	do 
 	{
-		//if (te32.th32OwnerProcessID == pid)
-		//{
+		if (te32.th32OwnerProcessID == pid)
+		{
 			threadIds.push_back(te32.th32ThreadID);
-	/*	}*/
+		}
 	} while (Thread32Next(hProcessSnap, &te32));
 	return TRUE;
+}
+
+//创建进程
+void CMFCthread01Dlg::OnBnClickedButton7()
+{
+	STARTUPINFO si;
+	PROCESS_INFORMATION pi;
+	ZeroMemory(&si, sizeof(si));
+	si.cb = sizeof(si);
+	ZeroMemory(&pi, sizeof(pi));
+	BOOL status= CreateProcess(".\\MFCthread01.exe",NULL, NULL,NULL,FALSE,0, NULL, NULL, &si, &pi);
+	if (!status)
+	{
+		MessageBox("创建进程失败！！！");
+	}
+	// Wait until child process exits.
+	//WaitForSingleObject(pi.hProcess, INFINITE);
+
+	// Close process and thread handles. 
+	CloseHandle(pi.hProcess);
+	CloseHandle(pi.hThread);
+}
+
+
+void CMFCthread01Dlg::OnBnClickedButton8()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	ExitProcess(1);
+}
+
+//管理员打开进程
+void CMFCthread01Dlg::OnBnClickedButton9()
+{
+
+	SHELLEXECUTEINFOA sy;
+	ZeroMemory(&sy,sizeof(SHELLEXECUTEINFOA));
+	sy.cbSize = sizeof(SHELLEXECUTEINFOA);
+	sy.fMask = SEE_MASK_NOCLOSEPROCESS;//如果执行之后 需要返回句柄或等待进程关闭,则使用此标志
+	sy.lpVerb = "runas";//以管理员身份启动应用程序
+	sy.nShow = SW_SHOW;//指定应用程序在打开时显示方式
+	sy.lpFile = ".\\MFC14.exe";
+	sy.lpDirectory = NULL;//功能同上 可忽略使用
+	sy.lpParameters = NULL;//可选。应用程序参数
+	BOOL b=ShellExecuteEx(&sy);
+	int i = GetLastError();
+	CloseHandle(sy.hProcess);
 }

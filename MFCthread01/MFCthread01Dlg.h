@@ -40,4 +40,7 @@ public:
 	afx_msg void OnBnClickedButton6();
 	BOOL getAllThreads(DWORD pid,vector<DWORD>&threadIds);
 	CListBox m_listBox;
+	afx_msg void OnBnClickedButton7();
+	afx_msg void OnBnClickedButton8();
+	afx_msg void OnBnClickedButton9();
 };
