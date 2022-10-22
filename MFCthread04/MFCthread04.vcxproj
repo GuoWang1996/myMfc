@@ -20,18 +20,17 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{FDA7D7C5-F4D6-4A91-A778-4E99471BA4A7}</ProjectGuid>
+    <ProjectGuid>{0E716B2E-6E0F-49E0-906E-4A3A7C548E6C}</ProjectGuid>
     <Keyword>MFCProj</Keyword>
-    <RootNamespace>MFthread02</RootNamespace>
+    <RootNamespace>MFCthread04</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
-    <ProjectName>MFCthread02</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
     <UseOfMfc>Static</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -99,7 +98,6 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
-      <UACUIAccess>false</UACUIAccess>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -191,15 +189,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
-    <ClInclude Include="MFthread02.h" />
-    <ClInclude Include="MFthread02Dlg.h" />
+    <ClInclude Include="MFCthread04.h" />
+    <ClInclude Include="MFCthread04Dlg.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MFthread02.cpp" />
-    <ClCompile Include="MFthread02Dlg.cpp" />
+    <ClCompile Include="MFCthread04.cpp" />
+    <ClCompile Include="MFCthread04Dlg.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -208,13 +206,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MFthread02.rc" />
+    <ResourceCompile Include="MFCthread04.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\MFthread02.rc2" />
+    <None Include="res\MFCthread04.rc2" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\MFthread02.ico" />
+    <Image Include="res\MFCthread04.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
