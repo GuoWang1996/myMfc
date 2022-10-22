@@ -46,4 +46,5 @@ public:
 	afx_msg void OnBnClickedButton2();
 	BOOL getAllModule(int pid, vector<ModuleList>&moduleLists);
 	CString m_pid;
+	afx_msg void OnBnClickedButton3();
 };

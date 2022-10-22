@@ -43,6 +43,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFCthread03", "MFCthread03\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFCthread04", "MFCthread04\MFCthread04.vcxproj", "{0E716B2E-6E0F-49E0-906E-4A3A7C548E6C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFCthread05", "MFCthread05\MFCthread05.vcxproj", "{756D07E4-1E7F-4F7D-8CC9-D6B54AC657C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -211,6 +213,14 @@ Global
 		{0E716B2E-6E0F-49E0-906E-4A3A7C548E6C}.Release|x64.Build.0 = Release|x64
 		{0E716B2E-6E0F-49E0-906E-4A3A7C548E6C}.Release|x86.ActiveCfg = Release|Win32
 		{0E716B2E-6E0F-49E0-906E-4A3A7C548E6C}.Release|x86.Build.0 = Release|Win32
+		{756D07E4-1E7F-4F7D-8CC9-D6B54AC657C7}.Debug|x64.ActiveCfg = Debug|x64
+		{756D07E4-1E7F-4F7D-8CC9-D6B54AC657C7}.Debug|x64.Build.0 = Debug|x64
+		{756D07E4-1E7F-4F7D-8CC9-D6B54AC657C7}.Debug|x86.ActiveCfg = Debug|Win32
+		{756D07E4-1E7F-4F7D-8CC9-D6B54AC657C7}.Debug|x86.Build.0 = Debug|Win32
+		{756D07E4-1E7F-4F7D-8CC9-D6B54AC657C7}.Release|x64.ActiveCfg = Release|x64
+		{756D07E4-1E7F-4F7D-8CC9-D6B54AC657C7}.Release|x64.Build.0 = Release|x64
+		{756D07E4-1E7F-4F7D-8CC9-D6B54AC657C7}.Release|x86.ActiveCfg = Release|Win32
+		{756D07E4-1E7F-4F7D-8CC9-D6B54AC657C7}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

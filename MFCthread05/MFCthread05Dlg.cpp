@@ -1,14 +1,13 @@
 ﻿
-// MFCthread04Dlg.cpp: 实现文件
+// MFCthread05Dlg.cpp: 实现文件
 //
 
 #include "pch.h"
 #include "framework.h"
-#include "MFCthread04.h"
-#include "MFCthread04Dlg.h"
+#include "MFCthread05.h"
+#include "MFCthread05Dlg.h"
 #include "afxdialogex.h"
-#include "Psapi.h"
-#include "tlhelp32.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -47,39 +46,44 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CMFCthread04Dlg 对话框
+// CMFCthread05Dlg 对话框
 
 
 
-CMFCthread04Dlg::CMFCthread04Dlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_MFCTHREAD04_DIALOG, pParent)
-	, m_editPid(_T(""))
-	, m_pid(_T(""))
+CMFCthread05Dlg::CMFCthread05Dlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_MFCTHREAD05_DIALOG, pParent)
+	, m_status(_T(""))
+	, m_className(_T(""))
+	, m_windowsName(_T(""))
+	, m_handleName(_T(""))
+	, m_editContext(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-void CMFCthread04Dlg::DoDataExchange(CDataExchange* pDX)
+void CMFCthread05Dlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Text(pDX, IDC_EDIT1, m_editPid);
-	DDX_Control(pDX, IDC_LIST1, m_listModule);
-	DDX_Text(pDX, IDC_EDIT2, m_pid);
+	DDX_Text(pDX, IDC_STATIC1, m_status);
+	DDX_Text(pDX, IDC_EDIT2, m_className);
+	DDX_Text(pDX, IDC_EDIT1, m_windowsName);
+	DDX_Text(pDX, IDC_EDIT3, m_handleName);
+	DDX_Text(pDX, IDC_EDIT4, m_editContext);
 }
 
-BEGIN_MESSAGE_MAP(CMFCthread04Dlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CMFCthread05Dlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDC_BUTTON1, &CMFCthread04Dlg::OnBnClickedButton1)
-	ON_BN_CLICKED(IDC_BUTTON2, &CMFCthread04Dlg::OnBnClickedButton2)
-	ON_BN_CLICKED(IDC_BUTTON3, &CMFCthread04Dlg::OnBnClickedButton3)
+	ON_BN_CLICKED(IDC_BUTTON1, &CMFCthread05Dlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CMFCthread05Dlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON3, &CMFCthread05Dlg::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 
-// CMFCthread04Dlg 消息处理程序
+// CMFCthread05Dlg 消息处理程序
 
-BOOL CMFCthread04Dlg::OnInitDialog()
+BOOL CMFCthread05Dlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
@@ -109,10 +113,11 @@ BOOL CMFCthread04Dlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
-void CMFCthread04Dlg::OnSysCommand(UINT nID, LPARAM lParam)
+void CMFCthread05Dlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
@@ -129,7 +134,7 @@ void CMFCthread04Dlg::OnSysCommand(UINT nID, LPARAM lParam)
 //  来绘制该图标。  对于使用文档/视图模型的 MFC 应用程序，
 //  这将由框架自动完成。
 
-void CMFCthread04Dlg::OnPaint()
+void CMFCthread05Dlg::OnPaint()
 {
 	if (IsIconic())
 	{
@@ -156,91 +161,46 @@ void CMFCthread04Dlg::OnPaint()
 
 //当用户拖动最小化窗口时系统调用此函数取得光标
 //显示。
-HCURSOR CMFCthread04Dlg::OnQueryDragIcon()
+HCURSOR CMFCthread05Dlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
 
-
-void CMFCthread04Dlg::OnBnClickedButton1()
+//获取句柄
+void CMFCthread05Dlg::OnBnClickedButton1()
 {
 	UpdateData(TRUE);
-	DWORD pid = atoi(m_editPid);
-	//HANDLE handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
-	HANDLE handle = GetCurrentProcess();
-	if (handle)
-	{
-		MessageBox(_T("打开成功"));
-	}
-
-	HMODULE  module = GetModuleHandle(NULL);
-	MODULEINFO mi = { 0 };
-	GetModuleInformation(handle, module,&mi,sizeof(MODULEINFO));
-	int i = 0;
-	CloseHandle(handle);
-}
-
-//遍历模块按钮
-void CMFCthread04Dlg::OnBnClickedButton2()
-{
-	UpdateData(TRUE);
-	int pid=atoi(m_pid);
-	vector<ModuleList> moduleLists;
-	moduleLists.clear();
-	m_listModule.ResetContent();
-	getAllModule(pid, moduleLists);
-	//界面显示
-	for (size_t i = 0; i < moduleLists.size(); i++)
-	{
-		CString str;
-		str.Format("模块名称:%s 模块首地址:%X 模块大小:%X", moduleLists[i].moduleName, moduleLists[i].moduleFirstAdress, moduleLists[i].moduleSize);
-		m_listModule.AddString(str);
-	}
+	HWND hwnd = ::FindWindow(m_className.IsEmpty()?NULL: m_className.GetBuffer(),m_windowsName);
+	int i = GetLastError();
+	CString str;
+	str.Format(_T("%X"),(DWORD)hwnd);
+	m_handleName = str;
 	UpdateData(FALSE);
 }
 
-//遍历模块
-BOOL CMFCthread04Dlg::getAllModule(int pid, vector<ModuleList>&moduleLists)
+//检测未响应
+void CMFCthread05Dlg::OnBnClickedButton2()
 {
-	ModuleList moduleList;
-	HANDLE handle;
-	//1.快照
-	handle = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pid);
-	if (!handle)
+	UpdateData(TRUE);
+	//HWND hwnd=(HWND)atoi(m_handleName);
+	HWND hwnd = ::FindWindow(m_className.IsEmpty() ? NULL : m_className.GetBuffer(), m_windowsName);
+	if (::IsHungAppWindow(hwnd))
 	{
-		MessageBox("失败");
-		return FALSE;
+		DWORD pid;
+		GetWindowThreadProcessId(hwnd, &pid);
+		HANDLE  handle=OpenProcess(PROCESS_ALL_ACCESS,FALSE,pid);
+		TerminateProcess(handle, 666);
 	}
-	MODULEENTRY32 me32;
-	me32.dwSize = sizeof(MODULEENTRY32);
-	if (!Module32First(handle, &me32))
-	{
-		CloseHandle(handle);     // Must clean up the snapshot object!
-		return(FALSE);
-	}
-	if (Module32First(handle, &me32))
-	{
-		do 
-		{
-				moduleList.moduleFirstAdress = (DWORD)me32.hModule;
-				moduleList.moduleName = me32.szModule;
-				moduleList.moduleSize = me32.modBaseSize;
-				moduleLists.push_back(moduleList);
-			
 
-		} while (Module32Next(handle, &me32));
-	}
-	CloseHandle(handle);
-	return TRUE;
 }
 
-//模拟未响应
-void CMFCthread04Dlg::OnBnClickedButton3()
+//设置窗口内容
+void CMFCthread05Dlg::OnBnClickedButton3()
 {
+	
 	// TODO: 在此添加控件通知处理程序代码
-	while (1)
-	{
-		Sleep(500);
-	}
+	UpdateData(TRUE);
+	HWND hwnd = ::FindWindow(m_className.IsEmpty() ? NULL : m_className.GetBuffer(), m_windowsName);
+	::SetWindowText(hwnd,m_editContext);
 }
