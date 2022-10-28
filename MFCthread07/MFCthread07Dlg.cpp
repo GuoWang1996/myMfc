@@ -78,6 +78,10 @@ BEGIN_MESSAGE_MAP(CMFCthread07Dlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CMFCthread07Dlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CMFCthread07Dlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON3, &CMFCthread07Dlg::OnBnClickedButton3)
+	ON_BN_CLICKED(IDC_BUTTON4, &CMFCthread07Dlg::OnBnClickedButton4)
+	ON_BN_CLICKED(IDC_BUTTON5, &CMFCthread07Dlg::OnBnClickedButton5)
 END_MESSAGE_MAP()
 
 
@@ -244,4 +248,39 @@ void CMFCthread07Dlg::OnBnClickedButton1()
 	CloseHandle(h2);
 	Call_输出调试信息("index：----%d\n", index);
 	//DeleteCriticalSection(&sct);
+}
+
+HANDLE handle[3] = { 0 };
+void CMFCthread07Dlg::OnBnClickedButton2()
+{
+
+	handle[0] = ::OpenEvent(EVENT_MODIFY_STATE,FALSE, "h_eventTwo");
+	handle[1] = ::OpenEvent(EVENT_MODIFY_STATE, FALSE, "h_eventEnd");
+	handle[2] = ::OpenEvent(EVENT_MODIFY_STATE, FALSE, "h_eventRecovery");
+	if (handle[0]==NULL)
+	{
+		MessageBox("获取权限失败");
+	}
+	else
+	{
+		MessageBox("获取权限成功");
+	}
+}
+
+//暂停
+void CMFCthread07Dlg::OnBnClickedButton3()
+{
+	SetEvent(handle[1]);
+}
+
+
+void CMFCthread07Dlg::OnBnClickedButton4()
+{
+	ResetEvent(handle[1]);
+}
+
+
+void CMFCthread07Dlg::OnBnClickedButton5()
+{
+	SetEvent(handle[0]);
 }

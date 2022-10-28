@@ -69,6 +69,10 @@ BEGIN_MESSAGE_MAP(CMFCthread08Dlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMFCthread08Dlg::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BUTTON3, &CMFCthread08Dlg::OnBnClickedButton3)
 	ON_BN_CLICKED(IDC_BUTTON4, &CMFCthread08Dlg::OnBnClickedButton4)
+	ON_BN_CLICKED(IDC_BUTTON5, &CMFCthread08Dlg::OnBnClickedButton5)
+	ON_BN_CLICKED(IDC_BUTTON6, &CMFCthread08Dlg::OnBnClickedButton6)
+	ON_BN_CLICKED(IDC_BUTTON7, &CMFCthread08Dlg::OnBnClickedButton7)
+	ON_BN_CLICKED(IDC_BUTTON8, &CMFCthread08Dlg::OnBnClickedButton8)
 END_MESSAGE_MAP()
 
 
@@ -170,6 +174,8 @@ void Call_输出调试信息(char*pszFormat, ...) {
 }
 HANDLE h_event;
 HANDLE h_eventTwo;
+HANDLE h_eventEnd;
+HANDLE h_eventRecovery;
 //打印线程
 unsigned __stdcall MyThreadFunction(void*  lpParam) {
 	int value = 0;
@@ -209,6 +215,31 @@ unsigned __stdcall MyThreadFunction3(void*  lpParam) {
 		{
 			Call_输出调试信息("退出线程2----------\n");
 			return 0;
+		}
+		//无信号
+		Call_输出调试信息("线程执行中-------------\n");
+		Sleep(1000);
+	}
+	return -5;
+
+}
+unsigned __stdcall MyThreadFunction4(void*  lpParam) {
+	Call_输出调试信息("进入线程3----------\n");
+	WaitForSingleObject(h_eventTwo, INFINITE);//事件2默认有信号，必然快速进入循环
+	//自动复位无信号
+	while (1)
+	{
+
+		if (WaitForSingleObject(h_eventTwo, 20) == WAIT_OBJECT_0)	//如果有信号 
+		{
+			SetEvent(h_eventTwo);
+			Call_输出调试信息("退出线程3----------\n");
+			return 0;
+		}
+		while (WaitForSingleObject(h_eventEnd, 20) == WAIT_OBJECT_0)
+		{
+			Call_输出调试信息("线程3暂停中----------\n");
+			Sleep(1000);
 		}
 		//无信号
 		Call_输出调试信息("线程执行中-------------\n");
@@ -264,4 +295,40 @@ void CMFCthread08Dlg::OnBnClickedButton3()
 void CMFCthread08Dlg::OnBnClickedButton4()
 {
 	ResetEvent(h_eventTwo);
+}
+
+
+//创建线程3
+void CMFCthread08Dlg::OnBnClickedButton5()
+{
+	h_eventTwo = ::CreateEvent(NULL, FALSE, TRUE, "h_eventTwo");
+	h_eventEnd = ::CreateEvent(NULL, TRUE, FALSE, "h_eventEnd");
+	h_eventRecovery = ::CreateEvent(NULL, FALSE, TRUE, "h_eventRecovery");
+	unsigned int adress = 0;
+	HANDLE handele[2] = { 0 };
+	handele[0] = (HANDLE)_beginthreadex(NULL, NULL, MyThreadFunction4, NULL, 0, &adress);
+	//WaitForSingleObject(handele[0], INFINITE);
+	//CloseHandle(handele[0]);
+	//CloseHandle(h_eventEnd);
+	//CloseHandle(h_eventRecovery);
+	//CloseHandle(h_eventTwo);
+}
+
+//暂停线程
+void CMFCthread08Dlg::OnBnClickedButton6()
+{
+	SetEvent(h_eventEnd);
+}
+
+//恢复线程
+void CMFCthread08Dlg::OnBnClickedButton7()
+{
+	ResetEvent(h_eventEnd);
+}
+
+//结束线程
+void CMFCthread08Dlg::OnBnClickedButton8()
+{
+	SetEvent(h_eventTwo);
+
 }
