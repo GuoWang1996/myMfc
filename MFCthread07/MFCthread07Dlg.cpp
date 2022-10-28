@@ -7,7 +7,8 @@
 #include "MFCthread07.h"
 #include "MFCthread07Dlg.h"
 #include "afxdialogex.h"
-
+#include "mutex"
+using namespace std;
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -164,6 +165,7 @@ HCURSOR CMFCthread07Dlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
+//临界区封装
 class MyLock
 {
 public:
@@ -200,13 +202,16 @@ private:
 
 CRITICAL_SECTION sct;
 int index = 0;
+mutex g_mutex;//互斥量
 unsigned __stdcall MyBeginthreadex(void* lpParam) {
 	for (int i=0;i<10000;i++)
 	{
 		Call_输出调试信息("加加原始值:%d\n", index);
 		//EnterCriticalSection(&sct);
-		MyLock myLock(&sct);
+		//MyLock myLock(&sct);
+		g_mutex.lock();
 		++index;
+		g_mutex.unlock();
 		//LeaveCriticalSection(&sct);
 		Call_输出调试信息("加加:%d\n", index);
 	}
@@ -217,8 +222,10 @@ unsigned __stdcall MyBeginthreadex2(void* lpParam) {
 	{
 		Call_输出调试信息("减减原始值:%d\n", index);
 		//EnterCriticalSection(&sct);
-		MyLock myLock(&sct);
+		//MyLock myLock(&sct);
+		g_mutex.lock();
 		--index;
+		g_mutex.unlock();
 		//LeaveCriticalSection(&sct);
 		Call_输出调试信息("减减:%d\n", index);
 	}
@@ -227,7 +234,7 @@ unsigned __stdcall MyBeginthreadex2(void* lpParam) {
 
 void CMFCthread07Dlg::OnBnClickedButton1()
 {
-	InitializeCriticalSection(&sct);
+	//InitializeCriticalSection(&sct);
 	unsigned int adress = 0;
 	HANDLE h1 = (HANDLE)_beginthreadex(NULL, NULL, MyBeginthreadex, (VOID*)2, 0, &adress);
 	HANDLE h2 = (HANDLE)_beginthreadex(NULL, NULL, MyBeginthreadex2, (VOID*)2, 0, &adress);
@@ -236,5 +243,5 @@ void CMFCthread07Dlg::OnBnClickedButton1()
 	CloseHandle(h1);
 	CloseHandle(h2);
 	Call_输出调试信息("index：----%d\n", index);
-	DeleteCriticalSection(&sct);
+	//DeleteCriticalSection(&sct);
 }
