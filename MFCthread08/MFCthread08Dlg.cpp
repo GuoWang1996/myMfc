@@ -106,9 +106,26 @@ BOOL CMFCthread08Dlg::OnInitDialog()
 	//  执行此操作
 	SetIcon(m_hIcon, TRUE);			// 设置大图标
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
-
 	// TODO: 在此添加额外的初始化代码
-
+	HANDLE h_eventSingleOpen;
+	h_eventSingleOpen = ::OpenEvent(EVENT_MODIFY_STATE, FALSE, "h_eventSingleOpen");
+	if (h_eventSingleOpen==NULL)
+	{
+		h_eventSingleOpen = ::CreateEvent(NULL, FALSE, TRUE, "h_eventSingleOpen");
+		if (h_eventSingleOpen==NULL)
+		{
+			MessageBox("创建失败");
+			EndDialog(-1);
+			return FALSE;
+		}
+	}
+	else
+	{
+		MessageBox("禁止多开");
+		EndDialog(-2);
+		return FALSE;
+	}
+	
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -176,6 +193,7 @@ HANDLE h_event;
 HANDLE h_eventTwo;
 HANDLE h_eventEnd;
 HANDLE h_eventRecovery;
+
 //打印线程
 unsigned __stdcall MyThreadFunction(void*  lpParam) {
 	int value = 0;
