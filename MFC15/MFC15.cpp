@@ -3,9 +3,14 @@
 
 #include <iostream>
 #include "windows.h"
+//#include "../StaticLib1/test.h"
+#include "../Dll1/test.h"
+#pragma comment(lib,"../Debug/DLL1.lib")
 using namespace std;
 int main()
 {
+	int i=add(2,3);
+	printf("静态库%d\n", i);
 	HANDLE handle= OpenMutex(MUTEX_ALL_ACCESS, TRUE,(LPCWSTR)"singleOpen");
 	//如果无进程打开，正常创建
 	if (handle==NULL)

@@ -1,0 +1,8 @@
+#include "test.h"
+#include <stdio.h>
+int add(int a, int b)
+{
+	printf("Œ“ «æ≤Ã¨ø‚—Ω");
+	int c = a + b;
+	return c;
+}
