@@ -7,7 +7,7 @@
 #ifdef DLL1_EXPORTS
 #define DLL1_API  __declspec(dllexport)
 #else
-#define DLL1_API  __declspec(dllimport)
+#define DLL1_API   __declspec(dllimport)
 #endif
 
 // 此类是从 dll 导出的
@@ -19,4 +19,4 @@ public:
 
 extern DLL1_API int nDll1;
 
-DLL1_API int _stdcall fnDll1(void);
+extern "C" DLL1_API int  fnDll1(void);

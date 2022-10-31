@@ -3,6 +3,7 @@
 
 #include "pch.h"
 #include "framework.h"
+#define DLL1_EXPORTS
 #include "Dll1.h"
 
 
@@ -10,7 +11,7 @@
 int nDll1=0;
 
 // 这是导出函数的一个示例。
- int _stdcall fnDll1(void)
+ int  fnDll1(void)
 {
     return 0;
 }

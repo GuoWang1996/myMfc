@@ -4,18 +4,22 @@
 #include <iostream>
 #include "windows.h"
 //#include "../StaticLib1/test.h"
-#include "../Dll1/test.h"
-#pragma comment(lib,"../Debug/DLL1.lib")
+//#define DLL1_EXPORTS
+//#include "../Dll1/test.h"
+//#pragma comment(lib,"../Debug/DLL1.lib")
 using namespace std;
+typedef int(* ADD)(int a, int b);
 int main()
 {
-	int i=add(2,3);
-	printf("静态库%d\n", i);
-	HANDLE handle= OpenMutex(MUTEX_ALL_ACCESS, TRUE,(LPCWSTR)"singleOpen");
+	HMODULE h= ::LoadLibrary("DLL1.dll");
+	ADD add=(ADD)GetProcAddress(h,"add");
+	int i=GetLastError();
+	printf("导入段：%d", add(1, 3));
+	HANDLE handle= OpenMutex(MUTEX_ALL_ACCESS, TRUE,"singleOpen");
 	//如果无进程打开，正常创建
 	if (handle==NULL)
 	{
-		handle=CreateMutex(NULL,TRUE, (LPCWSTR)"singleOpen");
+		handle=CreateMutex(NULL,TRUE,"singleOpen");
 		if (handle==NULL)
 		{
 			printf("创建互斥体失败");
@@ -26,7 +30,7 @@ int main()
 	//等待函数检查互斥量线程ID,如果为0(互斥量处于触发状态)，则置为1.因此等待函数在初次调用新创建的互斥体时，必然无需等待(因为处于有信号状态)
 	while (WaitForSingleObject(handle, 100) == WAIT_TIMEOUT)
 	{
-		MessageBox(NULL,(LPCWSTR)"请勿多开", (LPCWSTR)"标题",MB_OK);
+		MessageBox(NULL,"请勿多开", "标题",MB_OK);
 		return -2;
 	}
 	while (1)
